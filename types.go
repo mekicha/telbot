@@ -37,7 +37,6 @@ type Chat struct {
 	FirstName           string     `json:"first_name"`                    
 	LastName            string     `json:"last_name"`                     
 	AllMembersAreAdmins bool       `json:"all_members_are_administrators"`
-	Photo               *ChatPhoto `json:"photo"`
 	Description         string     `json:"description,omitempty"`
 	InviteLink          string     `json:"invite_link,omitempty"`
 }
@@ -45,7 +44,7 @@ type Chat struct {
 func (c Chat) IsPrivate() bool {
 	return c.Type == "private"
 }
-unc (c Chat) IsGroup() bool {
+func (c Chat) IsGroup() bool {
 	return c.Type == "group"
 }
 
