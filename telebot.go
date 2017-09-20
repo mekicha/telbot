@@ -1,12 +1,6 @@
 package telebot
 
-import (
-	"io/ioutil"
-	"bytes"
-	"net/http"
-	"fmt"
-	"encoding/json"
-)
+
 
 type Bot struct {
 	Token string 

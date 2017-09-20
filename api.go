@@ -1,40 +1,65 @@
 package telebot
 
+import (
+	"io/ioutil"
+	"bytes"
+	"net/http"
+	"fmt"
+	"encoding/json"
+)
+
+
 func (b *Bot) getMe() (User, error) {
 	url := fmt.Sprintf("https://api.telegram.org/bot%s/%s", b.Token, "getMe")
 
 	var buf bytes.Buffer
 
-	resp, err := http.Post(url, "application/json", &buf)
+	resp, err := http.Get(url)
+
 	if err != nil {
-		return []byte{}, errors.Wrap(err, "http.Post failed")
-	}
-	resp.Close = true
-	defer resp.Body.Close()
-	json, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return []byte{}, wrapSystem(err)
+		return User{}, err 
 	}
 
-return json, nil
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return User{}, err
+	}
+
+	var user User 
+	err = json.Unmarshal(body, &user)
+	if err != nil {
+		return User{}, nil 
+	}
+	return user, nil
+
 }
 
 func (b *Bot) sendMessage(chatID int64, text string) (Message, error) {
 
 	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage?chat_id=%d&text=%s", b.Token, chatID, text)
 
-	var buf bytes.Buffer
+	resp, err := http.Get(url)
 	
-		resp, err := http.Post(url, "application/json", &buf)
-
 		if err != nil {
 			return Message{}, err 
 		}
+	
+		defer resp.Body.Close()
+	
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return Message{}, err
+		}
+	
+		var m Message
+		err = json.Unmarshal(body, &m)
 
-		var message Message
+		if err != nil {
+			return Message{}, nil 
+		}
 
-		json.Unmarshal(resp.Body, &message)
-
-		return message, nil 
+		return m, nil
 
 }
