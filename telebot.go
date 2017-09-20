@@ -15,7 +15,7 @@ type Bot struct {
 
 func NewBot(token string) (*Bot, error){
 	bot := &Bot{
-				 Token: token
+	       Token: token,
 	}
 	
 	owner, err := bot.getMe()
@@ -27,7 +27,7 @@ func NewBot(token string) (*Bot, error){
 }
 
 
-func (*b Bot) getMe() (User, error) {
+func (b *Bot) getMe() (User, error) {
 	url := fmt.Sprintf("https://api.telegram.org/bot%s/%s", b.Token, "getMe")
 
 	var buf bytes.Buffer
@@ -46,7 +46,7 @@ func (*b Bot) getMe() (User, error) {
 return json, nil
 }
 
-func (*b Bot) sendMessage(chatID int64, text string) (*m Message, error) {
+func (b *Bot) sendMessage(chatID int64, text string) (Message, error) {
 
 	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage?chat_id=%d&text=%s", b.Token, chatID, text)
 
