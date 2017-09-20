@@ -16,7 +16,7 @@ type Message struct {
 	ForwardDate           int        `json:"forward_date"` 
 	ReplyToMessage        *Message   `json:"reply_to_message"`
 	EditDate              int        `json:"edit_date"`
-	Text string                      `json:"text"` 
+	Text 		              string     `json:"text"` 
 }
 
 type User struct {
