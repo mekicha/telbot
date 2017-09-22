@@ -35,7 +35,7 @@ func (b *Bot) getMe() (User, error) {
 
 }
 
-func (b *Bot) sendMessage(chatID int64, text string) (Message, error) {
+func (b *Bot) SendMessage(chatID int64, text string) (Message, error) {
 
 	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage?chat_id=%d&text=%s", b.Token, chatID, text)
 
