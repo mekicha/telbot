@@ -1,7 +1,6 @@
 package telebot
 
 import (
-	"strconv"
 	"io/ioutil"
 	"net/http"
 	"fmt"
