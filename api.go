@@ -1,18 +1,18 @@
 package telebot
 
 import (
+	"strconv"
 	"io/ioutil"
-	"bytes"
 	"net/http"
 	"fmt"
 	"encoding/json"
+	"errors"
 )
 
 
 func (b *Bot) getMe() (User, error) {
 	url := fmt.Sprintf("https://api.telegram.org/bot%s/%s", b.Token, "getMe")
 
-	var buf bytes.Buffer
 
 	resp, err := http.Get(url)
 
@@ -62,4 +62,33 @@ func (b *Bot) sendMessage(chatID int64, text string) (Message, error) {
 
 		return m, nil
 
+}
+
+
+
+func (b *Bot) getUpdates(offset int64, timeout int64)([]Update,error) {
+
+	url := fmt.Sprintf("https://api.telegram.org/bot%s/getUpdates?offset=%d&timeout=%d", b.Token, offset, timeout)
+	
+	resp, err := http.Get(url)
+
+	var updatesReceived struct {
+		Ok bool 
+		Result []Update 
+		Description string 
+	}
+
+	decoder := json.NewDecoder(resp.Body)
+
+	err = decoder.Decode(&updatesReceived)
+
+	if err != nil {
+		return updatesReceived.Result, err
+	}
+
+	if !updatesReceived.Ok {
+		return updatesReceived.Result, errors.New(updatesReceived.Description)
+	}
+
+	return updatesReceived.Result, nil 
 }

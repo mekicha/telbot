@@ -41,6 +41,13 @@ type Chat struct {
 	InviteLink          string     `json:"invite_link,omitempty"`
 }
 
+
+type Update struct {
+	ID int64 `json:"update_id"`
+	Payload *Message `json:"message"`
+}
+
+
 func (c Chat) IsPrivate() bool {
 	return c.Type == "private"
 }
@@ -58,5 +65,5 @@ func (c Chat) IsChannel() bool {
 
 
 func (m *Message) IsCommand() bool {
-	return m.Text != "" && strings.HasPrefix(m.Text,'/')
+	return m.Text != "" && strings.HasPrefix(m.Text,"/")
 }
