@@ -9,7 +9,7 @@ error to an Instagram Channel.
 
 **Still at a young stage. Will be improving it with time**
 
-A simple, maybe useless example.
+A simple, contrived example.
 
 This just sends `msg` to the channel name specified.
 You will have to add your bot as an administrator to the channel.
