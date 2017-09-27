@@ -67,3 +67,31 @@ func (c Chat) IsChannel() bool {
 func (m *Message) IsCommand() bool {
 	return m.Text != "" && strings.HasPrefix(m.Text,"/")
 }
+
+
+func (m *Message) Command() string {
+	if !m.IsCommand() {
+		return ""
+	}
+
+	command := strings.SplitN(m.Text, " ", 2)[0][1:]
+
+	if i := strings.Index(command, "@"); i != -1 {
+		command = command[:i]
+	}
+
+	return command
+}
+
+func (m *Message) CommandArguments() string {
+	if !m.IsCommand() {
+		return ""
+	}
+
+	split := strings.SplitN(m.Text, " ", 2)
+	if len(split) != 2 {
+		return ""
+	}
+
+	return split[1]
+}
