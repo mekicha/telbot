@@ -33,24 +33,17 @@ func (b *Bot) SendMessage(chatID int64, text string) (Message, error) {
 
 	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage?chat_id=%d&text=%s", b.Token, chatID, text)
 
-	resp, err := http.Get(url)
+	resp, err := getContent(url)
 	
 		if err != nil {
 			return Message{}, err 
 		}
 	
-		defer resp.Body.Close()
-	
-		body, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			return Message{}, err
-		}
-	
 		var m Message
-		err = json.Unmarshal(body, &m)
+		err = json.Unmarshal(resp, &m)
 
 		if err != nil {
-			return Message{}, nil 
+			return Message{}, err
 		}
 
 		return m, nil
