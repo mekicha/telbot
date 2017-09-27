@@ -12,20 +12,28 @@ import (
 func (b *Bot) getMe() (User, error) {
 	url := fmt.Sprintf("https://api.telegram.org/bot%s/%s", b.Token, "getMe")
 
-
 	resp, err := getContent(url)
 
 	if err != nil {
 		return User{}, err
 	}
 
-	var user User 
-	err = json.Unmarshal(resp, &user)
-
+	var botInfo struct {
+		Ok bool 
+		Result User 
+		Description string 
+	}
+	
+	err = json.Unmarshal(resp, &botInfo)
 	if err != nil {
 		return User{}, err
 	}
-	return user, nil
+	
+	if !botInfo.Ok {
+		return User{}, errors.New("bad response")
+	}
+
+	return botInfo.Result, nil 
 
 }
 
