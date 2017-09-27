@@ -54,27 +54,13 @@ func (b *Bot) SendToChannel(channelName string, text string)(error) {
 
 	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage?chat_id=%s&text=%s", b.Token, channelName, text)
 
-	resp, err := http.Get(url)
-	
-		var updatesReceived struct {
-			Ok bool 
-			Result Update 
-			Description string 
-		}
-	
-		decoder := json.NewDecoder(resp.Body)
-	
-		err = decoder.Decode(&updatesReceived)
-	
-		if err != nil {
-			return err 
-		}
-	
-		if !updatesReceived.Ok {
-		return 	errors.New(updatesReceived.Description)
-		}
-	
-		return nil
+	_, err := getContent(url)
+
+	if err != nil {
+		return err 
+	}
+
+	return nil 
 }
 
 
