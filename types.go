@@ -2,6 +2,7 @@ package telebot
 
 import (
 	"strings"
+	"net/url"
 )
 
 
@@ -94,4 +95,9 @@ func (m *Message) CommandArguments() string {
 	}
 
 	return split[1]
+}
+
+type WebhookConfig struct{
+	URL url.URL
+	Certificate interface{}
 }

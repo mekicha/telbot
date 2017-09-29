@@ -3,14 +3,18 @@ package telebot
 import (
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"fmt"
 	"encoding/json"
 	"errors"
 )
 
+const (
+	BASE_URL = "https:/api.telegram.org/bot%s/%s"
+)
 
 func (b *Bot) getMe() (User, error) {
-	url := fmt.Sprintf("https://api.telegram.org/bot%s/%s", b.Token, "getMe")
+	url := fmt.Sprintf(BASE_URL, b.Token, "getMe")
 
 	resp, err := getContent(url)
 
@@ -73,7 +77,7 @@ func (b *Bot) SendToChannel(channelName string, text string)(error) {
 
 
 
-func (b *Bot) getUpdates(offset int64, timeout int64)([]Update,error) {
+func (b *Bot) GetUpdates(offset int64, timeout int64)([]Update,error) {
 
 	url := fmt.Sprintf("https://api.telegram.org/bot%s/getUpdates?offset=%d&timeout=%d", b.Token, offset, timeout)
 	
@@ -120,4 +124,23 @@ func getContent(url string)([]byte, error) {
 	}
 
 	return body, nil 
+}
+
+func (b *Bot) SetWebhook(config WebhookConfig) bool {
+	// a https url to send updates to
+	// optional: ssl certificate 
+	// optional : max connections 
+	// allowed updates: optional
+
+	if config.Certificate == nil {
+		v := url.Values{}
+		v.Add("url", config.URL.String())
+	}
+
+
+	return true
+}
+
+func (b *Bot) DeleteWebhook() bool {
+	return true 
 }
