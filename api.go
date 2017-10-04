@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	BASE_URL = "https:/api.telegram.org/bot%s/%s"
+	BASE_URL = "https://api.telegram.org/bot%s/%s"
 )
 
 func (b *Bot) getMe() (User, error) {
