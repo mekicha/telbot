@@ -126,23 +126,29 @@ func getContent(url string)([]byte, error) {
 	return body, nil 
 }
 
-func (b *Bot) SetWebhook(config WebhookConfig) bool {
-	// a https url to send updates to
-	// optional: ssl certificate 
-	// optional : max connections 
-	// allowed updates: optional
-
-	if config.Certificate == nil {
-		v := url.Values{}
-		v.Add("url", config.URL.String())
+func (b *Bot) SetWebhook(url string) bool {
+	endpoint := fmt.Sprintf("https://api.telegram.org/bot%s/setWebhook?url=%s", b.Token, url)
+	resp, err := http.Get(endpoint)
+	if err != nil {
+		return false
 	}
+	var res APIResponse
 
+	decoder := json.NewDecoder(resp.Body)
 
-	return true
+	err = decoder.Decode(&res)
+
+	if !res.Ok {
+		return false 
+	}
+	return true 
 }
 
 func (b *Bot) DeleteWebhook() bool {
 	url := fmt.Sprintf(BASE_URL, b.Token, "deleteWebhook")
-	fmt.Println(url)
+	resp, err := http.Get(url)
+	if err != nil {
+		return false 
+	}
 	return true 
 }
