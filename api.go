@@ -152,3 +152,18 @@ func (b *Bot) DeleteWebhook() bool {
 	}
 	return true 
 }
+
+func (bot *Bot) ListenForWebhook(pattern string) UpdatesChannel {
+	ch := make(chan Update, 10)
+
+	http.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
+		bytes, _ := ioutil.ReadAll(r.Body)
+
+		var update Update
+		json.Unmarshal(bytes, &update)
+
+		ch <- update
+	})
+
+	return ch
+}
