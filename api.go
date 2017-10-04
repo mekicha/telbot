@@ -8,9 +8,6 @@ import (
 	"errors"
 )
 
-const (
-	BASE_URL = "https://api.telegram.org/bot%s/%s"
-)
 
 func (b *Bot) getMe() (User, error) {
 	url := fmt.Sprintf("https://api.telegram.org/bot%s/getMe", b.Token)
@@ -144,7 +141,7 @@ func (b *Bot) SetWebhook(url string) bool {
 }
 
 func (b *Bot) DeleteWebhook() bool {
-	url := fmt.Sprintf(BASE_URL, b.Token, "deleteWebhook")
+	url := fmt.Sprintf("https://api.telegram.com/bot%s/deleteWebhook", b.Token)
 	_, err := http.Get(url)
 	if err != nil {
 		return false 
