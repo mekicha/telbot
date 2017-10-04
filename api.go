@@ -145,7 +145,7 @@ func (b *Bot) SetWebhook(url string) bool {
 
 func (b *Bot) DeleteWebhook() bool {
 	url := fmt.Sprintf(BASE_URL, b.Token, "deleteWebhook")
-	resp, err := http.Get(url)
+	_, err := http.Get(url)
 	if err != nil {
 		return false 
 	}
