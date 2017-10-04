@@ -13,7 +13,7 @@ const (
 )
 
 func (b *Bot) getMe() (User, error) {
-	url := fmt.Sprintf(BASE_URL, b.Token, "getMe")
+	url := fmt.Sprintf("https://api.telegram.org/bot%s/getMe", b.Token)
 
 	resp, err := getContent(url)
 
