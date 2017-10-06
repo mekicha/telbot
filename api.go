@@ -1,6 +1,7 @@
 package telebot
 
 import (
+	"log"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -152,17 +153,19 @@ func (b *Bot) DeleteWebhook() bool {
 }
 
 // ListenForWebhook gets updates sent to the webhook url
-func (b *Bot) ListenForWebhook(pattern string) UpdatesChannel {
-	ch := make(chan Update, 10)
+func (b *Bot) ListenForWebhook(pattern string) ([]Update, error) {
+
+		var updatesReceived struct {
+		Ok          bool
+		Result      []Update
+		Description string
+	}
 
 	http.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
 		bytes, _ := ioutil.ReadAll(r.Body)
 
-		var update Update
-		json.Unmarshal(bytes, &update)
-
-		ch <- update
+		json.Unmarshal(bytes, &updatesReceived)
 	})
 
-	return ch
+	return updatesReceived.Result, nil 
 }
