@@ -152,19 +152,17 @@ func (b *Bot) DeleteWebhook() bool {
 }
 
 // ListenForWebhook gets updates sent to the webhook url
-func (b *Bot) ListenForWebhook(pattern string) ([]Update, error) {
-
-		var updatesReceived struct {
-		Ok          bool
-		Result      []Update
-		Description string
-	}
+func (b *Bot) ListenForWebhook(pattern string) UpdatesChannel {
+	ch := make(chan Update, 5)
 
 	http.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
 		bytes, _ := ioutil.ReadAll(r.Body)
 
-		json.Unmarshal(bytes, &updatesReceived)
+		var update Update
+		json.Unmarshal(bytes, &update)
+
+		ch <- update
 	})
 
-	return updatesReceived.Result, nil 
+	return ch
 }
