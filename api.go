@@ -1,7 +1,6 @@
 package telebot
 
 import (
-	"log"
 	"encoding/json"
 	"errors"
 	"fmt"
